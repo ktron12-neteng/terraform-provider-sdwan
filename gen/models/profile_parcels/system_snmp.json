@@ -648,7 +648,7 @@
                           "enum": ["global"]
                         },
                         "value": {
-                          "enum": ["sha"],
+                          "enum": ["sha", "sha256"],
                           "type": "string"
                         }
                       },
@@ -668,7 +668,7 @@
                           "maxLength": 128
                         },
                         "default": {
-                          "enum": ["sha"],
+                          "enum": ["sha", "sha256"],
                           "type": "string"
                         },
                         "description": {

@@ -1,0 +1,34 @@
+---
+name: Network Hierarchy Site
+rest_endpoint: /v1/network-hierarchy/
+id_attribute: created.0.uuid
+doc_category: Network Hierarchy
+attributes:
+  - model_name: name
+    type: String
+    id: true
+    mandatory: true
+    description: The name of the site
+    example: DC1
+  - model_name: description
+    type: String
+    description: Description
+    example: My site
+  - model_name: label
+    data_path: [data]
+    type: String
+    value: SITE
+  - model_name: parentUuid
+    tf_name: parent_id
+    data_path: [data]
+    type: String
+    mandatory: true
+    description: The ID of the parent node in the network hierarchy (e.g. a region or the Global node)
+    example: 3c2b8678-6fe5-42b1-a01d-c1cdf7ca7999
+  - model_name: siteId
+    tf_name: site_id
+    data_path: [data, hierarchyId]
+    type: Int64
+    mandatory: true
+    description: The site ID
+    example: 100

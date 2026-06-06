@@ -256,7 +256,7 @@ func (r *SystemSNMPProfileParcelResource) Schema(ctx context.Context, req resour
 						},
 						"authentication_protocol": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Configure authentication protocol").AddStringEnumDescription("sha", "sha256").String,
-							Optional: true,
+							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("sha", "sha256"),
 							},

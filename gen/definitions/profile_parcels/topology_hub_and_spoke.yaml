@@ -1,0 +1,62 @@
+---
+name: Topology Hub And Spoke
+rest_endpoint: /v1/feature-profile/sdwan/topology/%v/hubspoke
+minimum_version: 20.15.0
+parcel_type: feature
+id_attribute: id
+doc_category: Features - Topology
+test_tags: [SDWAN_2015]
+attributes:
+  - tf_name: feature_profile_id
+    reference: true
+    type: String
+    mandatory: true
+    description: Feature Profile ID
+    example: f6dd22c8-0b4f-496c-9a0b-6813d1f8b8ac
+    test_value: sdwan_topology_feature_profile.test.id
+  - model_name: vpn
+    tf_name: vpns
+    data_path: [target]
+    type: Set
+    element_type: String
+    mandatory: true
+    description: List of VPNs the hub-and-spoke topology applies to
+    example: VPN10
+  - model_name: selectedHierarchyHubs
+    tf_name: hubs
+    type: Set
+    element_type: String
+    description: List of network hierarchy node IDs used as hubs
+    example: dab0b0a9-32bb-4c1b-a32b-3472c1b1c992
+  - model_name: spokes
+    mandatory: true
+    description: List of spoke definitions
+    attributes:
+      - model_name: name
+        id: true
+        type: String
+        mandatory: true
+        description: Name of the spoke group
+        example: Spokes
+      - model_name: spokeHierarchyUuid
+        tf_name: site_ids
+        type: Set
+        element_type: String
+        mandatory: true
+        description: List of network hierarchy node IDs acting as spokes
+        example: ad8729e6-d454-4008-ab1f-1fc08d82706e
+      - model_name: hubSites
+        tf_name: hubs
+        description: Per-hub preference for this spoke group
+        attributes:
+          - model_name: hierarchyUuid
+            tf_name: site_ids
+            type: Set
+            element_type: String
+            mandatory: true
+            description: Network hierarchy node ID of the hub
+            example: dab0b0a9-32bb-4c1b-a32b-3472c1b1c992
+          - model_name: preference
+            type: Int64
+            description: Preference for this hub (lower is preferred)
+            example: 10

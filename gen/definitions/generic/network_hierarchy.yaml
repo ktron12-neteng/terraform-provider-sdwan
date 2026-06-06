@@ -1,0 +1,38 @@
+---
+name: Network Hierarchy
+rest_endpoint: /v1/network-hierarchy/
+remove_id: true
+doc_category: Network Hierarchy
+skip_templates: ["resource.go", "resource_test.go", "resource.tf", "import.sh"]
+ds_description: "This data source reads all network hierarchy nodes (Global, regions, sites, and folder nodes). Use it to discover the Global node and resolve node names to IDs."
+attributes:
+  - model_name: "@this"
+    tf_name: nodes
+    type: List
+    description: List of all network hierarchy nodes
+    attributes:
+      - model_name: id
+        tf_name: id
+        id: true
+        type: String
+        description: The UUID of the node
+        example: 3c2b8678-6fe5-42b1-a01d-c1cdf7ca7999
+      - model_name: name
+        type: String
+        description: The name of the node
+        example: Global
+      - model_name: data.label
+        tf_name: label
+        type: String
+        description: The node label (GLOBAL, REGION, SITE; folder nodes have no label)
+        example: GLOBAL
+      - model_name: data.parentUuid
+        tf_name: parent_id
+        type: String
+        description: The UUID of the parent node
+        example: 3c2b8678-6fe5-42b1-a01d-c1cdf7ca7999
+      - model_name: hierarchyPath
+        tf_name: hierarchy_path
+        type: String
+        description: The full hierarchy path of the node
+        example: Global

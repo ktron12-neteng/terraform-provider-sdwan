@@ -1,0 +1,118 @@
+# Manual resource - updateFromBody is manually maintained (template markers removed in
+# model_sdwan_topology_custom_control_feature.go) to read the keyless actions/set lists
+# positionally and avoid a perpetual tloc_action diff.
+---
+name: Topology Custom Control
+rest_endpoint: /v1/feature-profile/sdwan/topology/%v/custom-control
+minimum_version: 20.15.0
+parcel_type: feature
+id_attribute: id
+doc_category: Features - Topology
+test_tags: [SDWAN_2015]
+attributes:
+  - tf_name: feature_profile_id
+    reference: true
+    type: String
+    mandatory: true
+    description: Feature Profile ID
+    example: f6dd22c8-0b4f-496c-9a0b-6813d1f8b8ac
+    test_value: sdwan_topology_feature_profile.test.id
+  - model_name: defaultAction
+    tf_name: default_action
+    optional: true
+    description: Default action
+    example: reject
+  - model_name: level
+    tf_name: target_level
+    data_path: [target]
+    optional: true
+    description: Hierarchy level the control policy is applied at
+    example: SITE
+  - model_name: inboundHierarchyUuid
+    tf_name: target_inbound_site_ids
+    data_path: [target]
+    type: Set
+    element_type: String
+    optional: true
+    description: List of inbound network hierarchy node IDs
+    example: e00b80d7-826f-40e1-a7fe-7a542d42e059
+  - model_name: outboundHierarchyUuid
+    tf_name: target_outbound_site_ids
+    data_path: [target]
+    type: Set
+    element_type: String
+    optional: true
+    description: List of outbound network hierarchy node IDs
+    example: e00b80d7-826f-40e1-a7fe-7a542d42e059
+  - model_name: sequences
+    description: List of control policy sequences
+    attributes:
+      - model_name: sequenceId
+        tf_name: id
+        id: true
+        type: Int64
+        description: Sequence ID
+        example: 10
+      - model_name: sequenceName
+        tf_name: name
+        type: String
+        optional: true
+        description: Sequence name
+        example: Backup_TLOC
+      - model_name: baseAction
+        type: String
+        optional: true
+        description: Base action
+        example: accept
+      - model_name: sequenceType
+        tf_name: type
+        type: String
+        optional: true
+        description: Sequence type
+        example: route
+      - model_name: sequenceIpType
+        tf_name: ip_type
+        type: String
+        optional: true
+        description: Sequence IP type
+        example: ipv4
+      - model_name: entries
+        tf_name: match_entries
+        data_path: [match]
+        optional: true
+        description: List of match entries
+        attributes:
+          - model_name: hierarchyUuid
+            tf_name: site_ids
+            type: Set
+            element_type: String
+            optional: true
+            description: List of network hierarchy node IDs to match
+            example: e00b80d7-826f-40e1-a7fe-7a542d42e059
+      - model_name: actions
+        optional: true
+        description: List of actions
+        attributes:
+          - model_name: set
+            optional: true
+            description: List of set actions
+            attributes:
+              - model_name: preference
+                type: Int64
+                optional: true
+                description: Set preference value
+                example: 5000
+              - model_name: refId
+                tf_name: tloc_list_id
+                data_path: [tlocList]
+                reference: true
+                type: String
+                optional: true
+                description: TLOC list ID
+                example: 33923a1b-0e38-49dd-b833-1ff47661311d
+              - model_name: tlocAction
+                tf_name: tloc_action
+                type: String
+                optional: true
+                description: TLOC action
+                example: backup

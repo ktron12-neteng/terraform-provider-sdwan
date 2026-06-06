@@ -1,0 +1,27 @@
+---
+name: Network Hierarchy Region
+rest_endpoint: /v1/network-hierarchy/
+id_attribute: created.0.uuid
+doc_category: Network Hierarchy
+attributes:
+  - model_name: name
+    type: String
+    id: true
+    mandatory: true
+    description: The name of the region
+    example: Core Region
+  - model_name: description
+    type: String
+    description: Description
+    example: My region
+  - model_name: label
+    data_path: [data]
+    type: String
+    value: REGION
+  - model_name: parentUuid
+    tf_name: parent_id
+    data_path: [data]
+    type: String
+    mandatory: true
+    description: The ID of the parent node in the network hierarchy (e.g. the Global node)
+    example: 3c2b8678-6fe5-42b1-a01d-c1cdf7ca7999
