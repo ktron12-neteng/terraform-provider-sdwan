@@ -85,6 +85,10 @@ func (d *TopologyGroupDataSource) Schema(ctx context.Context, req datasource.Sch
 					},
 				},
 			},
+			"activate": schema.BoolAttribute{
+				MarkdownDescription: "Deploy (activate) the topology group after create/update.",
+				Computed:            true,
+			},
 		},
 	}
 }

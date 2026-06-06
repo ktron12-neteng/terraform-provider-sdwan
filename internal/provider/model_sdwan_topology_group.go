@@ -35,6 +35,7 @@ type TopologyGroup struct {
 	Description types.String            `tfsdk:"description"`
 	Solution    types.String            `tfsdk:"solution"`
 	Profiles    []TopologyGroupProfiles `tfsdk:"profiles"`
+	Activate    types.Bool              `tfsdk:"activate"`
 }
 
 type TopologyGroupProfiles struct {

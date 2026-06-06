@@ -30,6 +30,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -100,6 +101,12 @@ func (r *TopologyGroupResource) Schema(ctx context.Context, req resource.SchemaR
 					},
 				},
 			},
+			"activate": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Deploy (activate) the topology group after create/update.").AddDefaultValueDescription("false").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             booldefault.StaticBool(false),
+			},
 		},
 	}
 }
@@ -116,7 +123,7 @@ func (r *TopologyGroupResource) Configure(_ context.Context, req resource.Config
 
 // End of section. //template:end model
 
-// Section below is generated&owned by "gen/generator.go". //template:begin create
+// Section below is MANUALLY maintained (markers removed): adds the topology-group activate/deploy hook.
 func (r *TopologyGroupResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan TopologyGroup
 
@@ -139,6 +146,20 @@ func (r *TopologyGroupResource) Create(ctx context.Context, req resource.CreateR
 	}
 	plan.Id = types.StringValue(res.Get("id").String())
 
+	// Deploy (activate) the topology group if requested.
+	if plan.Activate.ValueBool() {
+		res, err = r.client.Post(fmt.Sprintf("/v1/topology-group/%s/device/deploy", url.QueryEscape(plan.Id.ValueString())), "{}")
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to deploy topology group (POST), got error: %s, %s", err, res.String()))
+			return
+		}
+		err, _ = helpers.WaitForActionToComplete(ctx, r.client, res.Get("parentTaskId").String(), r.taskTimeout)
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to activate topology group, got error: %s", err))
+			return
+		}
+	}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.Name.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
@@ -147,7 +168,7 @@ func (r *TopologyGroupResource) Create(ctx context.Context, req resource.CreateR
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-// End of section. //template:end create
+// End of manual section.
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
 func (r *TopologyGroupResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
@@ -163,7 +184,7 @@ func (r *TopologyGroupResource) Read(ctx context.Context, req resource.ReadReque
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Name.ValueString()))
 
 	res, err := r.client.Get(state.getPath() + url.QueryEscape(state.Id.ValueString()))
-	if strings.Contains(res.Get("error.message").String(), "Failed to find specified resource") || strings.Contains(res.Get("error.message").String(), "Invalid template type") || strings.Contains(res.Get("error.message").String(), "Template definition not found") || strings.Contains(res.Get("error.message").String(), "Invalid Profile Id") || strings.Contains(res.Get("error.message").String(), "Invalid feature Id") || strings.Contains(res.Get("error.message").String(), "Invalid config group passed") || strings.Contains(res.Get("error.message").String(), "Invalid TOPOLOGY group passed") {
+	if strings.Contains(res.Get("error.message").String(), "Failed to find specified resource") || strings.Contains(res.Get("error.message").String(), "Invalid template type") || strings.Contains(res.Get("error.message").String(), "Template definition not found") || strings.Contains(res.Get("error.message").String(), "Invalid Profile Id") || strings.Contains(res.Get("error.message").String(), "Invalid feature Id") || strings.Contains(res.Get("error.message").String(), "Invalid config group passed") || strings.Contains(res.Get("error.message").String(), "Invalid TOPOLOGY group passed") || strings.Contains(res.Get("error.message").String(), "Invalid network hierarchy id") {
 		resp.State.RemoveResource(ctx)
 		return
 	} else if err != nil {
@@ -183,7 +204,7 @@ func (r *TopologyGroupResource) Read(ctx context.Context, req resource.ReadReque
 
 // End of section. //template:end read
 
-// Section below is generated&owned by "gen/generator.go". //template:begin update
+// Section below is MANUALLY maintained (markers removed): adds the topology-group activate/deploy hook.
 func (r *TopologyGroupResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state TopologyGroup
 
@@ -221,13 +242,27 @@ func (r *TopologyGroupResource) Update(ctx context.Context, req resource.UpdateR
 		tflog.Debug(ctx, fmt.Sprintf("%s: No changes detected", plan.Name.ValueString()))
 	}
 
+	// Deploy (activate) the topology group if requested.
+	if plan.Activate.ValueBool() {
+		res, err := r.client.Post(fmt.Sprintf("/v1/topology-group/%s/device/deploy", url.QueryEscape(plan.Id.ValueString())), "{}")
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to deploy topology group (POST), got error: %s, %s", err, res.String()))
+			return
+		}
+		err, _ = helpers.WaitForActionToComplete(ctx, r.client, res.Get("parentTaskId").String(), r.taskTimeout)
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to activate topology group, got error: %s", err))
+			return
+		}
+	}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Name.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 
-// End of section. //template:end update
+// End of manual section.
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
 func (r *TopologyGroupResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
