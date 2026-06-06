@@ -1,0 +1,266 @@
+{
+  "request": {
+    "$schema": "http://json-schema.org/draft/2019-09/schema",
+    "$id": "https://cisco.com/schema/profileparcel/sdwan/network-settings/security-logging/common/request_schema.json",
+    "title": "Security Logging Network Setting Schema",
+    "description": "Security Logging Network Setting Schema",
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "object",
+        "properties": {
+          "highSpeedLogging": {
+            "description": "High Speed Logging",
+            "type": "array",
+            "maxItems": 4,
+            "uniqueItems": true,
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "enum": [
+                        "server1",
+                        "server2",
+                        "server3",
+                        "server4"
+                      ]
+                    },
+                    "vrf": {
+                      "oneOf": [
+                        {
+                          "properties": {
+                            "optionType": {
+                              "type": "string",
+                              "enum": [
+                                "global"
+                              ]
+                            },
+                            "value": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "optionType",
+                            "value"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    },
+                    "serverIp": {
+                      "oneOf": [
+                        {
+                          "properties": {
+                            "optionType": {
+                              "type": "string",
+                              "enum": [
+                                "global"
+                              ]
+                            },
+                            "value": {
+                              "type": "string",
+                              "format": "ipv6"
+                            }
+                          },
+                          "required": [
+                            "optionType",
+                            "value"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "optionType": {
+                              "type": "string",
+                              "enum": [
+                                "global"
+                              ]
+                            },
+                            "value": {
+                              "type": "string",
+                              "pattern": "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)(\\.(?!$)|$)){4}$"
+                            }
+                          },
+                          "required": [
+                            "optionType",
+                            "value"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    },
+                    "port": {
+                      "oneOf": [
+                        {
+                          "properties": {
+                            "optionType": {
+                              "type": "string",
+                              "enum": [
+                                "global"
+                              ]
+                            },
+                            "value": {
+                              "minimum": 1,
+                              "maximum": 65535,
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "optionType",
+                            "value"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "vrf",
+                    "serverIp",
+                    "port"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "utdSyslog": {
+            "description": "UTD Syslog",
+            "type": "array",
+            "maxItems": 1,
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "vpn": {
+                      "oneOf": [
+                        {
+                          "properties": {
+                            "optionType": {
+                              "type": "string",
+                              "enum": [
+                                "global"
+                              ]
+                            },
+                            "value": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "optionType",
+                            "value"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    },
+                    "serverIp": {
+                      "oneOf": [
+                        {
+                          "properties": {
+                            "optionType": {
+                              "type": "string",
+                              "enum": [
+                                "global"
+                              ]
+                            },
+                            "value": {
+                              "type": "string",
+                              "pattern": "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)(\\.(?!$)|$)){4}$"
+                            }
+                          },
+                          "required": [
+                            "optionType",
+                            "value"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "vpn",
+                    "serverIp"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "documentation": {
+        "description": "This is the documentation for request schema for Network Hierarchy Security Logging Setting",
+        "details-1": "variable name should be present with given format as specified in schema if optionType value is variable",
+        "details-2": "variable name should not be present if optionType value is NOT variable",
+        "details-3": "when option Type is global,  value should be present with given format/restrictions as specified in schema",
+        "details-4": "when option Type is default, value should be present with given default value as specified in schema",
+        "examples": [
+          {
+            "data": {
+              "highSpeedLogging": [
+                {
+                  "vrf": {
+                    "optionType": "global",
+                    "value": "Corporate_Users"
+                  },
+                  "serverIp": {
+                    "optionType": "global",
+                    "value": "10.0.1.1"
+                  },
+                  "port": {
+                    "optionType": "global",
+                    "value": 1234
+                  }
+                },
+                {
+                  "vrf": {
+                    "optionType": "global",
+                    "value": "Corporate_Users"
+                  },
+                  "serverIp": {
+                    "optionType": "global",
+                    "value": "10.0.1.2"
+                  },
+                  "port": {
+                    "optionType": "global",
+                    "value": 600
+                  }
+                }
+              ],
+              "utdSyslog": [
+                {
+                  "vpn": {
+                    "optionType": "global",
+                    "value": "Corporate_Users"
+                  },
+                  "serverIp": {
+                    "optionType": "global",
+                    "value": "10.0.1.3"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "minVManageVersion": "20.18"
+      }
+    },
+    "required": [
+      "data"
+    ],
+    "not": {
+      "required": [
+        "documentation",
+        "metadata"
+      ]
+    },
+    "additionalProperties": false
+  }
+}

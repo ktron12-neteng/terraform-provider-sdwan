@@ -1,0 +1,62 @@
+# Network-hierarchy Security Logging (UX 2.0): Global node > Collectors > Security Logging.
+# Parcel-style payload (payload.data) with no name; %v = network hierarchy (Global) node id.
+---
+name: Network Hierarchy Security Logging
+rest_endpoint: /v1/network-hierarchy/%v/network-settings/security-logging
+minimum_version: 20.15.0
+id_attribute: id
+parcel_type: feature
+no_name: true
+no_data_source_name_query: true
+doc_category: Network Hierarchy
+attributes:
+  - tf_name: network_hierarchy_id
+    reference: true
+    type: String
+    mandatory: true
+    description: The ID of the network hierarchy node (the Global node) the security logging applies to
+    example: 3c2b8678-6fe5-42b1-a01d-c1cdf7ca7999
+  - model_name: highSpeedLogging
+    tf_name: high_speed_logging
+    type: List
+    description: List of high speed logging (Netflow) servers
+    attributes:
+      - model_name: name
+        tf_name: name
+        type: String
+        id: true
+        no_option_type: true
+        enum_values: [server1, server2, server3, server4]
+        description: Server name
+        example: server1
+      - model_name: vrf
+        tf_name: vrf
+        type: String
+        description: VRF / VPN the server is reachable in
+        example: VPN10
+      - model_name: serverIp
+        tf_name: server_ip
+        type: String
+        description: Server IP address
+        example: 10.1.200.253
+      - model_name: port
+        tf_name: port
+        type: Int64
+        description: Server port
+        example: 2055
+  - model_name: utdSyslog
+    tf_name: utd_syslog
+    type: List
+    description: List of UTD syslog servers
+    attributes:
+      - model_name: vpn
+        tf_name: vpn
+        type: String
+        id: true
+        description: VPN the server is reachable in
+        example: VPN10
+      - model_name: serverIp
+        tf_name: server_ip
+        type: String
+        description: Server IP address
+        example: 10.1.200.253
