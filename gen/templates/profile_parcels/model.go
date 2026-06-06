@@ -175,8 +175,10 @@ func (data {{camelCase .Name}}) getPath() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data {{camelCase .Name}}) toBody(ctx context.Context{{if hasMinVersionCondition .Attributes}}, ver *version.Version{{end}}) string {
 	body := ""
+	{{- if not .NoName}}
 	body, _ = sjson.Set(body, "name", data.Name.ValueString())
 	body, _ = sjson.Set(body, "description", data.Description.ValueString())
+	{{- end}}
 	{{- if .TypeValue}}
 	body, _ = sjson.Set(body, "data.type", "{{.TypeValue}}")
 	{{- end}}
@@ -392,12 +394,17 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context{{if hasMinVersionCond
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result) {
+	{{- if .NoName}}
+	data.Name = types.StringNull()
+	data.Description = types.StringNull()
+	{{- else}}
 	data.Name = types.StringValue(res.Get("payload.name").String())
 	if value := res.Get("payload.description"); value.Exists() && value.String() != "" {
 		data.Description = types.StringValue(value.String())
 	} else {
 		data.Description = types.StringNull()
 	}
+	{{- end}}
 	path := "payload.data."
 	{{- range .Attributes}}
 	{{- $cname := toGoName .TfName}}
@@ -574,12 +581,17 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result)
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res gjson.Result) {
+	{{- if .NoName}}
+	data.Name = types.StringNull()
+	data.Description = types.StringNull()
+	{{- else}}
 	data.Name = types.StringValue(res.Get("payload.name").String())
 	if value := res.Get("payload.description"); value.Exists() && value.String() != "" {
 		data.Description = types.StringValue(value.String())
 	} else {
 		data.Description = types.StringNull()
 	}
+	{{- end}}
 	path := "payload.data."
 	{{- range .Attributes}}
 	{{- if and (or (eq .Type "String") (eq .Type "Int64") (eq .Type "StringInt64") (eq .Type "Float64") (eq .Type "Bool") (isListSet .)) (not .Reference) (not .TfOnly) (not .WriteOnly) (not .Encrypted) (not .Value)}}

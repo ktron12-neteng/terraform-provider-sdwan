@@ -1,0 +1,577 @@
+{
+  "request": {
+    "$schema": "http://json-schema.org/draft/2019-09/schema",
+    "$id": "https://cisco.com/schema/profileparcel/sdwan/network-settings/cflowd/common/request_schema.json",
+    "title": "Cflowd Network Setting Schema",
+    "description": "Cflowd Network Setting Schema",
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "object",
+        "properties": {
+          "flowActiveTimeout": {
+            "description": "Active Flow Timeout(Seconds)",
+            "type": "object",
+            "oneOf": [
+              {
+                "properties": {
+                  "optionType": {
+                    "type": "string",
+                    "enum": [
+                      "global"
+                    ]
+                  },
+                  "value": {
+                    "type": "integer",
+                    "default": 600,
+                    "minimum": 30,
+                    "maximum": 3600
+                  }
+                },
+                "required": [
+                  "optionType",
+                  "value"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "flowInactiveTimeout": {
+            "description": "Inactive Flow Timeout(Seconds)",
+            "type": "object",
+            "oneOf": [
+              {
+                "properties": {
+                  "optionType": {
+                    "type": "string",
+                    "enum": [
+                      "global"
+                    ]
+                  },
+                  "value": {
+                    "type": "integer",
+                    "default": 60,
+                    "minimum": 1,
+                    "maximum": 3600
+                  }
+                },
+                "required": [
+                  "optionType",
+                  "value"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "flowRefreshTime": {
+            "description": "Flow Refresh Time(Seconds)",
+            "type": "object",
+            "oneOf": [
+              {
+                "properties": {
+                  "optionType": {
+                    "type": "string",
+                    "enum": [
+                      "global"
+                    ]
+                  },
+                  "value": {
+                    "type": "integer",
+                    "default": 600,
+                    "minimum": 60,
+                    "maximum": 86400
+                  }
+                },
+                "required": [
+                  "optionType",
+                  "value"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "flowSamplingInterval": {
+            "description": "Sampling Interval(Seconds)",
+            "type": "object",
+            "oneOf": [
+              {
+                "properties": {
+                  "optionType": {
+                    "type": "string",
+                    "enum": [
+                      "global"
+                    ]
+                  },
+                  "value": {
+                    "type": "integer",
+                    "default": 1,
+                    "minimum": 1,
+                    "maximum": 65536
+                  }
+                },
+                "required": [
+                  "optionType",
+                  "value"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "collectTlocLoopback": {
+            "description": "Collect SDWAN TLOC loopback interface name instead of physical",
+            "type": "object",
+            "oneOf": [
+              {
+                "properties": {
+                  "optionType": {
+                    "type": "string",
+                    "enum": [
+                      "global"
+                    ]
+                  },
+                  "value": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                },
+                "required": [
+                  "optionType",
+                  "value"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "protocol": {
+            "description": "FNF Protocol",
+            "type": "object",
+            "oneOf": [
+              {
+                "properties": {
+                  "optionType": {
+                    "type": "string",
+                    "enum": [
+                      "global"
+                    ]
+                  },
+                  "value": {
+                    "type": "string",
+                    "default": "ipv4",
+                    "enum": [
+                      "ipv4",
+                      "ipv6",
+                      "both"
+                    ]
+                  }
+                },
+                "required": [
+                  "optionType",
+                  "value"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "customizedIpv4RecordFields": {
+            "description": "Custom IPV4 flow record fields",
+            "type": "object",
+            "properties": {
+              "collectTos": {
+                "description": "Collect TOS",
+                "type": "object",
+                "oneOf": [
+                  {
+                    "properties": {
+                      "optionType": {
+                        "type": "string",
+                        "enum": [
+                          "global"
+                        ]
+                      },
+                      "value": {
+                        "type": "boolean",
+                        "default": false
+                      }
+                    },
+                    "required": [
+                      "optionType",
+                      "value"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "collectDscpOutput": {
+                "description": "Collect Re-marked DSCP",
+                "type": "object",
+                "oneOf": [
+                  {
+                    "properties": {
+                      "optionType": {
+                        "type": "string",
+                        "enum": [
+                          "global"
+                        ]
+                      },
+                      "value": {
+                        "type": "boolean",
+                        "default": false
+                      }
+                    },
+                    "required": [
+                      "optionType",
+                      "value"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "additionalProperties": false
+          },
+          "collectors": {
+            "description": "Collectors list",
+            "type": "array",
+            "uniqueItems": true,
+            "maxItems": 4,
+            "items": {
+              "description": "Collector configuration",
+              "type": "object",
+              "properties": {
+                "vpnId": {
+                  "description": "VPN ID",
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "optionType": {
+                          "type": "string",
+                          "enum": [
+                            "global"
+                          ]
+                        },
+                        "value": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 65530
+                        }
+                      },
+                      "required": [
+                        "optionType",
+                        "value"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                },
+                "address": {
+                  "description": "Collector IPv4/IPv6 address",
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "optionType": {
+                          "type": "string",
+                          "enum": [
+                            "global"
+                          ]
+                        },
+                        "value": {
+                          "type": "string",
+                          "oneOf": [
+                            {
+                              "pattern": "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)(\\.(?!$)|$)){4}$"
+                            },
+                            {
+                              "format": "ipv6"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "optionType",
+                        "value"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                },
+                "udpPort": {
+                  "description": "Collector UDP port number,RFC recommended is 4739",
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "optionType": {
+                          "type": "string",
+                          "enum": [
+                            "global"
+                          ]
+                        },
+                        "value": {
+                          "type": "integer",
+                          "minimum": 1024,
+                          "maximum": 65535,
+                          "default": 4739
+                        }
+                      },
+                      "required": [
+                        "optionType",
+                        "value"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                },
+                "exportSpread": {
+                  "description": "Export spreading enable",
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "optionType": {
+                          "type": "string",
+                          "enum": [
+                            "global"
+                          ]
+                        },
+                        "value": {
+                          "type": "boolean",
+                          "default": false
+                        }
+                      },
+                      "required": [
+                        "optionType",
+                        "value"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                },
+                "bfdMetricsExport": {
+                  "description": "BFD Metric Exporting enable knob",
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "optionType": {
+                          "type": "string",
+                          "enum": [
+                            "global"
+                          ]
+                        },
+                        "value": {
+                          "type": "boolean",
+                          "default": false
+                        }
+                      },
+                      "required": [
+                        "optionType",
+                        "value"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                },
+                "exportInterval": {
+                  "description": "BFD Export Interval(Seconds)",
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "optionType": {
+                          "type": "string",
+                          "enum": [
+                            "global"
+                          ]
+                        },
+                        "value": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 86400,
+                          "default": 600
+                        }
+                      },
+                      "required": [
+                        "optionType",
+                        "value"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              },
+              "dependencies": {
+                "exportInterval": {
+                  "properties": {
+                    "bfdMetricsExport": {
+                      "properties": {
+                        "value": {
+                          "const": true
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "bfdMetricsExport"
+                  ]
+                }
+              },
+              "required": [
+                "vpnId",
+                "address",
+                "udpPort"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "dependencies": {
+          "customizedIpv4RecordFields": {
+            "properties": {
+              "protocol": {
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "enum": [
+                      "ipv4",
+                      "both"
+                    ]
+                  }
+                }
+              }
+            },
+            "required": [
+              "protocol"
+            ]
+          }
+        },
+        "required": [
+          "flowActiveTimeout",
+          "flowInactiveTimeout",
+          "flowRefreshTime",
+          "flowSamplingInterval",
+          "protocol"
+        ],
+        "additionalProperties": false
+      },
+      "metadata": {
+        "supportedDeviceTypes": [
+          "vsmart"
+        ],
+        "minVManageVersion": "20.15.1"
+      },
+      "documentation": {
+        "description": "This is the documentation for request schema for Network Hierarchy Cflowd Setting",
+        "details-1": "variable name should be present with given format as specified in schema if optionType value is variable",
+        "details-2": "variable name should not be present if optionType value is NOT variable",
+        "details-3": "when option Type is global,  value should be present with given format/restrictions as specified in schema",
+        "details-4": "when option Type is default, value should be present with given default value as specified in schema",
+        "examples": [
+          {
+            "data": {
+              "flowActiveTimeout": {
+                "optionType": "global",
+                "value": 600
+              },
+              "flowInactiveTimeout": {
+                "optionType": "global",
+                "value": 60
+              },
+              "flowSamplingInterval": {
+                "optionType": "global",
+                "value": 1
+              },
+              "flowRefreshTime": {
+                "optionType": "global",
+                "value": 600
+              },
+              "collectTlocLoopback": {
+                "optionType": "global",
+                "value": true
+              },
+              "protocol": {
+                "optionType": "global",
+                "value": "ipv4"
+              },
+              "customizedIpv4RecordFields": {
+                "collectTos": {
+                  "optionType": "global",
+                  "value": false
+                },
+                "collectDscpOutput": {
+                  "optionType": "global",
+                  "value": false
+                }
+              },
+              "collectors": [
+                {
+                  "vpnId": {
+                    "optionType": "global",
+                    "value": 1
+                  },
+                  "address": {
+                    "optionType": "global",
+                    "value": "3002::1"
+                  },
+                  "udpPort": {
+                    "optionType": "global",
+                    "value": 7543
+                  },
+                  "exportSpread": {
+                    "optionType": "global",
+                    "value": false
+                  },
+                  "bfdMetricsExport": {
+                    "optionType": "global",
+                    "value": true
+                  },
+                  "exportInterval": {
+                    "optionType": "global",
+                    "value": 600
+                  }
+                },
+                {
+                  "vpnId": {
+                    "optionType": "global",
+                    "value": 0
+                  },
+                  "address": {
+                    "optionType": "global",
+                    "value": "10.0.1.1"
+                  },
+                  "udpPort": {
+                    "optionType": "global",
+                    "value": 4739
+                  },
+                  "exportSpread": {
+                    "optionType": "global",
+                    "value": false
+                  },
+                  "bfdMetricsExport": {
+                    "optionType": "global",
+                    "value": true
+                  },
+                  "exportInterval": {
+                    "optionType": "global",
+                    "value": 600
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "required": [
+      "data"
+    ],
+    "not": {
+      "required": [
+        "metadata",
+        "documentation"
+      ]
+    },
+    "additionalProperties": false
+  }
+}

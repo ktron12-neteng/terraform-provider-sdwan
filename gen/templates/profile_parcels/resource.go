@@ -81,7 +81,11 @@ func (r *{{camelCase .Name}}ProfileParcelResource) Schema(ctx context.Context, r
 			},
 			"name": schema.StringAttribute{
 				MarkdownDescription: "The name of the {{camelCase .ParcelType}}",
+				{{- if .NoName}}
+				Optional:            true,
+				{{- else}}
 				Required:            true,
+				{{- end}}
 			},
 			"description": schema.StringAttribute{
 				MarkdownDescription: "The description of the {{camelCase .ParcelType}}",

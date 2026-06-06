@@ -1,0 +1,117 @@
+# Network-hierarchy Cflowd (UX 2.0): Global node > Collectors > Cflowd.
+# Parcel-style payload (optionType envelope, payload.data) with no name.
+# %v in the endpoint is the network hierarchy node id (the Global node).
+# Field formatting mirrors the classic Cflowd Policy Definition resource.
+---
+name: Network Hierarchy Cflowd
+rest_endpoint: /v1/network-hierarchy/%v/network-settings/cflowd
+minimum_version: 20.15.0
+id_attribute: id
+parcel_type: feature
+no_name: true
+no_data_source_name_query: true
+doc_category: Network Hierarchy
+attributes:
+  - tf_name: network_hierarchy_id
+    reference: true
+    type: String
+    mandatory: true
+    description: The ID of the network hierarchy node (the Global node) the cflowd applies to
+    example: 3c2b8678-6fe5-42b1-a01d-c1cdf7ca7999
+  - model_name: flowActiveTimeout
+    tf_name: active_flow_timeout
+    type: Int64
+    mandatory: true
+    min_int: 30
+    max_int: 3600
+    description: Active flow timeout in seconds
+    example: 600
+  - model_name: flowInactiveTimeout
+    tf_name: inactive_flow_timeout
+    type: Int64
+    mandatory: true
+    min_int: 1
+    max_int: 3600
+    description: Inactive flow timeout in seconds
+    example: 60
+  - model_name: flowRefreshTime
+    tf_name: flow_refresh
+    type: Int64
+    mandatory: true
+    min_int: 60
+    max_int: 86400
+    description: Flow template refresh time in seconds
+    example: 600
+  - model_name: flowSamplingInterval
+    tf_name: sampling_interval
+    type: Int64
+    mandatory: true
+    min_int: 1
+    max_int: 65536
+    description: Flow sampling interval
+    example: 1
+  - model_name: collectTlocLoopback
+    tf_name: collect_tloc_loopback
+    type: Bool
+    description: Collect TLOC loopback
+    example: false
+  - model_name: protocol
+    tf_name: protocol
+    type: String
+    enum_values: [ipv4, ipv6, both]
+    description: Protocol, either `ipv4`, `ipv6` or `both`
+    example: ipv4
+  - model_name: collectTos
+    data_path: [customizedIpv4RecordFields]
+    tf_name: tos
+    type: Bool
+    description: Collect TOS record field
+    example: false
+  - model_name: collectDscpOutput
+    data_path: [customizedIpv4RecordFields]
+    tf_name: remarked_dscp
+    type: Bool
+    description: Collect remarked DSCP
+    example: false
+  - model_name: collectors
+    tf_name: collectors
+    type: List
+    description: List of collectors
+    attributes:
+      - model_name: vpnId
+        tf_name: vpn_id
+        type: Int64
+        id: true
+        min_int: 0
+        max_int: 65530
+        description: VPN ID
+        example: 10
+      - model_name: address
+        tf_name: ip_address
+        type: String
+        description: IP address of the collector
+        example: 10.10.101.2
+      - model_name: udpPort
+        tf_name: port
+        type: Int64
+        min_int: 1024
+        max_int: 65535
+        description: UDP port
+        example: 4739
+      - model_name: exportSpread
+        tf_name: export_spreading
+        type: Bool
+        description: Export spreading
+        example: false
+      - model_name: bfdMetricsExport
+        tf_name: bfd_metrics_exporting
+        type: Bool
+        description: BFD metrics exporting
+        example: false
+      - model_name: exportInterval
+        tf_name: exporting_interval
+        type: Int64
+        min_int: 1
+        max_int: 86400
+        description: Exporting interval
+        example: 60

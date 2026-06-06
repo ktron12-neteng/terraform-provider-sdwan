@@ -212,6 +212,7 @@ type YamlConfig struct {
 	NoDataSource             bool                  `yaml:"no_data_source"`
 	NoDelete                 bool                  `yaml:"no_delete"`
 	NoDataSourceNameQuery    bool                  `yaml:"no_data_source_name_query"`
+	NoName                   bool                  `yaml:"no_name"`
 	GetBeforeDelete          bool                  `yaml:"get_before_delete"`
 	DeleteMutex              bool                  `yaml:"delete_mutex"`
 	ParcelType               string                `yaml:"parcel_type"`
