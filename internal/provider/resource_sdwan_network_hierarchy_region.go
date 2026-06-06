@@ -146,7 +146,7 @@ func (r *NetworkHierarchyRegionResource) Read(ctx context.Context, req resource.
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Name.ValueString()))
 
 	res, err := r.client.Get(state.getPath() + url.QueryEscape(state.Id.ValueString()))
-	if strings.Contains(res.Get("error.message").String(), "Failed to find specified resource") || strings.Contains(res.Get("error.message").String(), "Invalid template type") || strings.Contains(res.Get("error.message").String(), "Template definition not found") || strings.Contains(res.Get("error.message").String(), "Invalid Profile Id") || strings.Contains(res.Get("error.message").String(), "Invalid feature Id") || strings.Contains(res.Get("error.message").String(), "Invalid config group passed") {
+	if strings.Contains(res.Get("error.message").String(), "Failed to find specified resource") || strings.Contains(res.Get("error.message").String(), "Invalid template type") || strings.Contains(res.Get("error.message").String(), "Template definition not found") || strings.Contains(res.Get("error.message").String(), "Invalid Profile Id") || strings.Contains(res.Get("error.message").String(), "Invalid feature Id") || strings.Contains(res.Get("error.message").String(), "Invalid config group passed") || strings.Contains(res.Get("error.message").String(), "Invalid TOPOLOGY group passed") || strings.Contains(res.Get("error.message").String(), "Invalid network hierarchy id") {
 		resp.State.RemoveResource(ctx)
 		return
 	} else if err != nil {

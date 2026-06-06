@@ -534,7 +534,7 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", {{if hasName .Attributes}}state.Name.ValueString(){{else}}state.Id.ValueString(){{end}}))
 
 	res, err := r.client.Get({{if .GetRestEndpoint}}"{{.GetRestEndpoint}}"{{else}}state.getPath(){{end}}{{if not .RemoveId}} + url.QueryEscape(state.Id.ValueString()){{end}})
-	if strings.Contains(res.Get("error.message").String(), "Failed to find specified resource") || strings.Contains(res.Get("error.message").String(), "Invalid template type") || strings.Contains(res.Get("error.message").String(), "Template definition not found") || strings.Contains(res.Get("error.message").String(), "Invalid Profile Id") || strings.Contains(res.Get("error.message").String(), "Invalid feature Id") || strings.Contains(res.Get("error.message").String(), "Invalid config group passed") || strings.Contains(res.Get("error.message").String(), "Invalid TOPOLOGY group passed") {
+	if strings.Contains(res.Get("error.message").String(), "Failed to find specified resource") || strings.Contains(res.Get("error.message").String(), "Invalid template type") || strings.Contains(res.Get("error.message").String(), "Template definition not found") || strings.Contains(res.Get("error.message").String(), "Invalid Profile Id") || strings.Contains(res.Get("error.message").String(), "Invalid feature Id") || strings.Contains(res.Get("error.message").String(), "Invalid config group passed") || strings.Contains(res.Get("error.message").String(), "Invalid TOPOLOGY group passed") || strings.Contains(res.Get("error.message").String(), "Invalid network hierarchy id") {
 		resp.State.RemoveResource(ctx)
 		return
 	} else if err != nil {
