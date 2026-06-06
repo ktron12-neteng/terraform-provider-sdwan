@@ -242,7 +242,9 @@ func (r *TopologyGroupResource) Update(ctx context.Context, req resource.UpdateR
 		tflog.Debug(ctx, fmt.Sprintf("%s: No changes detected", plan.Name.ValueString()))
 	}
 
-	// Deploy (activate) the topology group if requested.
+	// Reconcile activation state. `activate: true` deploys (activates) the group;
+	// toggling it back to false deactivates it (pushes deactivateTopology so the
+	// control policy is removed from the vSmart). Both are async deploy tasks.
 	if plan.Activate.ValueBool() {
 		res, err := r.client.Post(fmt.Sprintf("/v1/topology-group/%s/device/deploy", url.QueryEscape(plan.Id.ValueString())), "{}")
 		if err != nil {
@@ -252,6 +254,17 @@ func (r *TopologyGroupResource) Update(ctx context.Context, req resource.UpdateR
 		err, _ = helpers.WaitForActionToComplete(ctx, r.client, res.Get("parentTaskId").String(), r.taskTimeout)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to activate topology group, got error: %s", err))
+			return
+		}
+	} else if state.Activate.ValueBool() {
+		res, err := r.client.Post(fmt.Sprintf("/v1/topology-group/%s/device/deploy", url.QueryEscape(plan.Id.ValueString())), `{"deactivateTopology": true}`)
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to deactivate topology group (POST), got error: %s, %s", err, res.String()))
+			return
+		}
+		err, _ = helpers.WaitForActionToComplete(ctx, r.client, res.Get("parentTaskId").String(), r.taskTimeout)
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to deactivate topology group, got error: %s", err))
 			return
 		}
 	}
@@ -264,7 +277,7 @@ func (r *TopologyGroupResource) Update(ctx context.Context, req resource.UpdateR
 
 // End of manual section.
 
-// Section below is generated&owned by "gen/generator.go". //template:begin delete
+// Section below is MANUALLY maintained (markers removed): deactivates an active topology group before delete.
 func (r *TopologyGroupResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state TopologyGroup
 
@@ -277,6 +290,21 @@ func (r *TopologyGroupResource) Delete(ctx context.Context, req resource.DeleteR
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Name.ValueString()))
 
+	// An active topology group cannot be deleted ("in active state"); deactivate it
+	// first (deactivateTopology removes the control policy from the vSmart).
+	if state.Activate.ValueBool() {
+		res, err := r.client.Post(fmt.Sprintf("/v1/topology-group/%s/device/deploy", url.QueryEscape(state.Id.ValueString())), `{"deactivateTopology": true}`)
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to deactivate topology group before delete (POST), got error: %s, %s", err, res.String()))
+			return
+		}
+		err, _ = helpers.WaitForActionToComplete(ctx, r.client, res.Get("parentTaskId").String(), r.taskTimeout)
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to deactivate topology group before delete, got error: %s", err))
+			return
+		}
+	}
+
 	res, err := r.client.Delete(state.getPath() + url.QueryEscape(state.Id.ValueString()))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object (DELETE), got error: %s, %s", err, res.String()))
@@ -288,7 +316,7 @@ func (r *TopologyGroupResource) Delete(ctx context.Context, req resource.DeleteR
 	resp.State.RemoveResource(ctx)
 }
 
-// End of section. //template:end delete
+// End of manual section.
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
 func (r *TopologyGroupResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
