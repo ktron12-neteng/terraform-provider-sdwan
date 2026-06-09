@@ -107,6 +107,10 @@ func (r *TopologyGroupResource) Schema(ctx context.Context, req resource.SchemaR
 				Computed:            true,
 				Default:             booldefault.StaticBool(false),
 			},
+			"redeploy_trigger": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Arbitrary value that forces a re-deploy (re-activation) of the topology group when it changes. Not sent to the API. Set it to a hash of upstream policy/topology content (or timestamp()) so the control policy re-pushes to the vSmart whenever a referenced object changes.").String,
+				Optional:            true,
+			},
 		},
 	}
 }

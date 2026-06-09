@@ -36,6 +36,12 @@ type TopologyGroup struct {
 	Solution    types.String            `tfsdk:"solution"`
 	Profiles    []TopologyGroupProfiles `tfsdk:"profiles"`
 	Activate    types.Bool              `tfsdk:"activate"`
+	// RedeployTrigger is a pure trigger: it is NOT sent to the API (omitted from
+	// toBody) and NOT read back (untouched by fromBody), so changing its value
+	// forces Terraform to call Update, which re-deploys/re-activates the group.
+	// Set it to a hash of upstream policy/topology content (or timestamp()) so the
+	// control policy re-pushes to the vSmart when a referenced object changes.
+	RedeployTrigger types.String `tfsdk:"redeploy_trigger"`
 }
 
 type TopologyGroupProfiles struct {
